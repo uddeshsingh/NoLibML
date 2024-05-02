@@ -1,5 +1,5 @@
  const constants = require("../common/constants");
- const features  = require("../common/features");
+ const featureFunctions  = require("../common/featureFunctions");
 
  const fs  = require('fs');
 
@@ -8,7 +8,7 @@
  for(const sample of samples){
     const paths = JSON.parse(fs.readFileSync(constants.JSON_DIR+"/"+sample.id+".json"));
 
-    sample.point=[features.getPathCount(paths), features.getPointCount(paths)];
+    sample.point=[featureFunctions.getPathCount(paths), featureFunctions.getPointCount(paths)];
 
  }
 

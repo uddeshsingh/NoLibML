@@ -1,5 +1,5 @@
 class SketchPad{
-    constructor(container, size=400){
+    constructor(container, onUpdate = null,  size=400){
         this.canvas = document.createElement("canvas");
         this.canvas.width = size;
         this.canvas.height = size;
@@ -20,7 +20,7 @@ class SketchPad{
         this.ctx = this.canvas.getContext("2d")
 
         
-
+        this.onUpdate =onUpdate;
         this.reset();  
 
         this.#addEventListeners();
@@ -84,7 +84,19 @@ class SketchPad{
         else{
             this.undoBtn.disabled=true;
         }
+
+        if(this.onUpdate){
+            this.onUpdate(this.paths);
+        }
+        this.triggerUpdate();
     }
+
+    triggerUpdate(){
+        if(this.onUpdate){
+            this.onUpdate(this.paths);
+        }
+    }
+
     #getMouse = (evt) =>{
         const rect= this.canvas.getBoundingClientRect();
         return [

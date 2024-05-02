@@ -19,6 +19,8 @@
         <script src ="../common/constants.js"></script>
         <script src="../common/utils.js"></script>
         <script src="../common/draw.js"></script>
+        <script src="../common/featureFunctions.js "></script>
+
 
         <script src="./js/display.js"></script>
         <script src="./js/sketchPad.js"></script>
@@ -56,7 +58,16 @@
                     handleClick
                 );
                  
-            const input = new SketchPad(inputContainer);
+            const input = new SketchPad(inputContainer, onDrawingUpdate);
+
+            input.canvas.style.cssText += "outline: 100000px solid rgba(0,0,0,0.8);"
+
+
+             function onDrawingUpdate(paths){
+                const point=[featureFunctions.getPathCount(paths), featureFunctions.getPointCount(paths)];
+
+                chart.showDynamicPoints(point);
+             }
         </script>
     </body>
 </html>
