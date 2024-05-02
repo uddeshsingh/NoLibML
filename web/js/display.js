@@ -70,7 +70,7 @@ function toggleInput(){
 
     if(inputContainer.style.display=='none'){
         inputContainer.style.display = 'block'
-        input.triggerUpdate()
+        input.triggerUpdate() 
     }
     else{
         inputContainer.style.display = 'none'
