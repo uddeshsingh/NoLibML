@@ -87,8 +87,8 @@
 
              function classify(point){
                 const samplePoints = samples.map(s=>s.point);
-                const index=utils.getNearest(point,samplePoints);
-                const nearestSample = samples[index];
+                const indices=utils.getNearest(point,samplePoints);
+                const nearestSample = samples[indices[0]];
                 // console.log("nearestSample in Classify" + nearestSample)
                 return {label:nearestSample.label, nearestSampleIndex:nearestSample};
              }

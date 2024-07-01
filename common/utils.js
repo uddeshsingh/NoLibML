@@ -52,11 +52,11 @@ if (typeof module !== 'undefined'){
 utils.getNearest=(loc,points, k=1)=>{
 
     const obj=points.map((val,ind)=>{
-        return (ind,val);
+        return {ind,val}
     });
 
     const sorted = obj.sort((a,b)=>{
-        return utils.distance(loc,a.val)-utils.distance(loc,b.val);
+        return utils.distance(loc,a.val)-utils.distance(loc,b.val)
     });
 
     const indices=sorted.map((obj)=>obj.ind);
