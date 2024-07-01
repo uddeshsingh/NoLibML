@@ -93,7 +93,7 @@ class SketchPad{
 
     triggerUpdate(){
         if(this.onUpdate){
-            this.onUpdate(this.paths);
+            this.onUpdate (this.paths);
         }
     }
 

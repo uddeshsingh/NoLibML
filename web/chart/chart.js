@@ -48,7 +48,7 @@ class Chart{
        this.#draw();
    }
 
-   hideDynamicPoints(){
+   hideDynamicPoints(point){
       this.dynamicPoint= null;
       this.#draw();
   }
@@ -250,6 +250,8 @@ class Chart{
       if(this.dynamicPoint){
          const pixLoc = math.remapPoint(this.dataBounds,this.pixelBounds,this.dynamicPoint);
 
+
+         graphics.drawPoint(ctx,pixLoc, "rgba(255,255,255,0.7)",1000000)
          graphics.drawPoint(ctx,pixLoc, "black")
       }
 
