@@ -77,3 +77,9 @@ body{
     padding: 10px;
 
 }
+
+#predictedLabelContainer{
+    color: white;
+    position: relative;
+    font-size: 30px;
+}

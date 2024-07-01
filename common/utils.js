@@ -48,3 +48,73 @@ utils.groupBy = (objArray, key) =>{
 if (typeof module !== 'undefined'){
     module.exports= utils;
 }
+
+utils.getNearest=(loc,points, k=1)=>{
+
+    const obj=points.map((val,ind)=>{
+        return (ind,val);
+    });
+
+    const sorted = obj.sort((a,b)=>{
+        return utils.distance(loc,a.val)-utils.distance(loc,b.val);
+    });
+
+    const indices=sorted.map((obj)=>obj.ind);
+
+    return indices.slice(0,k);
+
+
+    // let minDist=Number.MAX_SAFE_INTEGER;
+    // let nearestIndex=0;
+ 
+    // for(let i=0;i<points.length;i++){
+    //    const point=points[i];
+    //    const d=utils.distance(loc,point);
+ 
+    //    if(d<minDist){
+    //       minDist=d;
+    //       nearestIndex=i;
+    //    }
+    // }
+    // return nearestIndex;
+ }
+
+
+ utils.distance=(p1,p2)=>{
+    return Math.sqrt(
+       (p1[0]-p2[0])**2+
+       (p1[1]-p2[1])**2
+    );
+ }
+
+ utils.invLerp=(a,b,v)=>{
+    return (v-a)/(b-a);
+ }
+
+ utils.normalizePoints=(point, minMax )=>{
+    let min,max;
+    const dimensions = point[0].length;
+    if (minMax){
+        min = minMax.min;
+        max = minMax.max;
+    }
+    else{
+        min = [...point[0]];
+        max = [...point[0]];
+        for (let i=1;i<point.length;i++){
+            for (let j=0;j<dimensions;j++){
+                min[j] = Math.min(min[j], point[i][j]);
+                max[j] = Math.max(max[j], point[i][j]);
+            }
+        }
+    }
+
+    for(let i=0;i<point.length;i++){
+        for(let j=0;j<dimensions;j++){
+            point[i][j] = utils.invLerp(min[j], max[j], point[i][j]);
+        }
+    }
+
+    return {min,max};
+
+ }

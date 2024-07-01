@@ -7,7 +7,12 @@
     </head>
     <body>
         <h1>Data Viewer</h1> 
-        <div id = "inputContainer"></div>
+        <div id = "inputContainer">
+
+            <div id="predictedLabelContainer"></div>
+
+        </div>
+        
         <div id="controlPanel">
             <button onClick="toggleInput()"> Toggle Input </button>
         </div> 
@@ -15,6 +20,8 @@
         <div id = "container"></div>
         
         <script src="../common/js_objects/features.js"></script>
+        <script src="../common/js_objects/minMax.js"></script>
+
 
         <script src ="../common/constants.js"></script>
         <script src="../common/utils.js"></script>
@@ -64,9 +71,26 @@
 
 
              function onDrawingUpdate(paths){
-                const point=[featureFunctions.getPathCount(paths), featureFunctions.getPointCount(paths)];
+                const functions = featureFunctions.inUse.map(f=>f.function);
+                const point = functions.map(f=>f(paths));
+                // const point=[featureFunctions.getPathCount(paths), featureFunctions.getPointCount(paths)];
 
-                chart.showDynamicPoints(point);
+                utils.normalizePoints([point],minMax);
+                const {label,nearestSampleIndex} = classify(point)
+                console.log(label)
+
+                predictedLabelContainer.innerHTML = "Is it a " + label + " ?";
+                // console.log("This is" + nearestSampleIndex);
+                chart.showDynamicPoints(point,label,nearestSampleIndex);
+             }
+
+
+             function classify(point){
+                const samplePoints = samples.map(s=>s.point);
+                const index=utils.getNearest(point,samplePoints);
+                const nearestSample = samples[index];
+                // console.log("nearestSample in Classify" + nearestSample)
+                return {label:nearestSample.label, nearestSampleIndex:nearestSample};
              }
         </script>
     </body>

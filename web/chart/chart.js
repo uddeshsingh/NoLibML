@@ -37,14 +37,17 @@ class Chart{
       this.defaultDataBounds=this.#getDataBounds();
 
       this.dynamicPoint = null;
+      this.nearestSampleIndex = null;
 
       this.#draw();
 
       this.#addEventListeners();
    }
 
-   showDynamicPoints(point){
-       this.dynamicPoint= point;
+   showDynamicPoints(point, label, nearestSampleIndex){
+       this.dynamicPoint= {point,label};
+
+       this.nearestSampleIndex = nearestSampleIndex;
        this.#draw();
    }
 
@@ -218,10 +221,14 @@ class Chart{
       const maxX=Math.max(...x);
       const minY=Math.min(...y);
       const maxY=Math.max(...y);
+
+      const deltX = maxX - minX;
+      const deltY = maxY - minY;
+      const maxDelt = Math.max(deltX,deltY);
       const bounds={
          left:minX,
-         right:maxX,
-         top:maxY,
+         right:minX+maxDelt,
+         top:minY+maxDelt,
          bottom:minY
       };
       return bounds;
@@ -248,11 +255,17 @@ class Chart{
       }
 
       if(this.dynamicPoint){
-         const pixLoc = math.remapPoint(this.dataBounds,this.pixelBounds,this.dynamicPoint);
+
+         const {point, label} = this.dynamicPoint;
+         const pixLoc = math.remapPoint(this.dataBounds,this.pixelBounds,point);
 
 
-         graphics.drawPoint(ctx,pixLoc, "rgba(255,255,255,0.7)",1000000)
-         graphics.drawPoint(ctx,pixLoc, "black")
+         graphics.drawPoint(ctx,pixLoc, "rgba(255,255,255,0.7)",1000000);
+         ctx.beginPath();
+         ctx.moveTo(...pixLoc)
+         ctx.lineTo(...math.remapPoint(this.dataBounds,this.pixelBounds,this.nearestSampleIndex.point));
+         ctx.stroke();
+         graphics.drawImage(ctx,this.styles[label].image,pixLoc);
       }
 
       this.#drawAxes();
