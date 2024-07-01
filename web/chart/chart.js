@@ -37,17 +37,17 @@ class Chart{
       this.defaultDataBounds=this.#getDataBounds();
 
       this.dynamicPoint = null;
-      this.nearestSampleIndex = null;
+      this.nearestSamples = null;
 
       this.#draw();
 
       this.#addEventListeners();
    }
 
-   showDynamicPoints(point, label, nearestSampleIndex){
+   showDynamicPoints(point, label, nearestSamples){
        this.dynamicPoint= {point,label};
 
-       this.nearestSampleIndex = nearestSampleIndex;
+       this.nearestSamples = nearestSamples;
        this.#draw();
    }
 
@@ -261,10 +261,17 @@ class Chart{
 
 
          graphics.drawPoint(ctx,pixLoc, "rgba(255,255,255,0.7)",1000000);
-         ctx.beginPath();
-         ctx.moveTo(...pixLoc)
-         ctx.lineTo(...math.remapPoint(this.dataBounds,this.pixelBounds,this.nearestSampleIndex.point));
-         ctx.stroke();
+
+         for(const sample of this.nearestSamples){
+            const point = math.remapPoint(this.dataBounds,this.pixelBounds,sample.point);
+            ctx.beginPath();
+            ctx.moveTo(...pixLoc)
+            ctx.lineTo(...point);
+            ctx.stroke();
+         }
+
+         console.log("Drawing dynamic point with label:", label); // Debug log
+         console.log("Styles object:", this.styles); // Debug log
          graphics.drawImage(ctx,this.styles[label].image,pixLoc);
       }
 

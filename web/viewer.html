@@ -76,21 +76,36 @@
                 // const point=[featureFunctions.getPathCount(paths), featureFunctions.getPointCount(paths)];
 
                 utils.normalizePoints([point],minMax);
-                const {label,nearestSampleIndex} = classify(point)
-                console.log(label)
+                const {maxLabel,nearestSamples} = classify(point)
+                console.log(maxLabel)
 
-                predictedLabelContainer.innerHTML = "Is it a " + label + " ?";
+                predictedLabelContainer.innerHTML = "Is it a " + maxLabel + " ?";
                 // console.log("This is" + nearestSampleIndex);
-                chart.showDynamicPoints(point,label,nearestSampleIndex);
+                chart.showDynamicPoints(point,maxLabel,nearestSamples);
              }
 
 
              function classify(point){
                 const samplePoints = samples.map(s=>s.point);
-                const indices=utils.getNearest(point,samplePoints);
-                const nearestSample = samples[indices[0]];
-                // console.log("nearestSample in Classify" + nearestSample)
-                return {label:nearestSample.label, nearestSampleIndex:nearestSample};
+                const indices=utils.getNearest(point,samplePoints,10);
+                const nearestSamples = indices.map(i=>samples[i]);
+                const labels = nearestSamples.map(s=>s.label);
+
+                console.log("Classify labels:", labels); // Debug log
+                const count = {};
+
+                for (const label of labels){
+                    count[label]=count[label]?count[label]+1:1;
+                }
+
+                const max = Math.max(...Object.values(count));
+
+                const maxLabel = labels.find(l=>count[l]==max);
+
+
+
+                console.log("maxLabel in Classify" + max + maxLabel)
+                return {maxLabel,nearestSamples};
              }
         </script>
     </body>
